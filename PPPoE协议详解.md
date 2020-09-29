@@ -83,3 +83,47 @@ Discovery阶段由4个步骤组成。完成之后通信双方都知道了PPPoE S
   * 一旦PPPoE会话开始，PPP数据就像其它PPP封装一样发送。所有的以太网数据包都是单播的。
   * ETHER_TYPE域设置为0x8864。PPPoE的CODE必须设置为0x00。PPPoE会话的SESSION_ID不允许发生改变，必须是Discovery阶段所指定的值。
   * PPPoE的payload包含一个PPP帧，帧始于PPP Protocol-ID。
+
+## 附录
+### TAG类型和TAG值
+ * 0x0000 End-Of-List
+	 * 表示没有更多的TAG，TAG_LENGTH必须总是0，此TAG不是必需的，它保持向后兼容。   
+	 
+ * 0x0101 Service-Name
+	 * 表示业务名，TAG_LENGTH为0时表示任何业务都是可以接受的。 
+	 
+ * 0x0102 AC-Name
+	 * 唯一标示了一个特定的接入服务器区别于其他的接入服务器，它可以是商标，模块和一系列的ID信息。
+	 
+ * 0x0103 Host-Uniq
+	 * 主机如何知道一个PADO或PADS是对自己发出的PADI 或 PADR的应答？
+	 * 通过Host-Uniq唯一识别。TAG_VALUE 是主机任选的一个二进制数值。在PADI 或PADR中，主机可以包含一个Host-Uniq TAG 。
+	 * 如果接入服务器收到此TAG，它必须不加修改地包含此TAG在相应的PADO 或PADS 响应中。
+	 * 首先主机是知道自己发送的Host-Uniq值的，接入服务器应答时会在应答报文中不加修改地再携带此TAG。
+	 
+ * 0x0104 AC-Cookie
+	 * 此TAG是接入服务器用来防止DOS攻击。接入服务器可以在PADO报文中包含此TAG。
+	 * 如果主机收到此TAG，它必须在接下来的PADR报文中不加修改地携带此TAG。TAG_VALUE 是任意的二进制数值，并且不能被主机解释。
+	 
+ * 0x0105 Vendor-Specific
+	 * 此TAG用于传递供应商所有权信息。TAG_VALUE的前四字节是供应商ID,剩下的字节为指定。
+	 * 高1字节是0，低3字节是提供商SMI网络管理私用企业代码。
+	 
+ * 0x0110 Relay-Session-Id
+	 * 此TAG可以被一个中间代理加到任何discovery报文中，TAG_VALUE对接入服务器和主机不透明，Relay-Session-Id TAG with a TAG_VALUE 长度为12字节。
+	 * Relay-Session-Id TAG不应该加到已经包含了一个Relay-Session-Id TAG的discovery报文中。在这种情况下，中继代理应该已经存在的Relay-Session-Id TAG。
+	 * 如果不能使用存在的 TAG 或者没有充足的空间加一Relay- Session-Id TAG，中继代理应该返回Generic-Error TAG 给发送者。
+	 
+ * 0x0201 Service-Name-Error
+	 * 当被请求的服务不支持，此TAG（特别数据部分是0长度）指出原因 。    
+	 * 如果有数据，并且数据的第一字节非0，必须用UTF-8字符串解释为什么请求被拒绝。 
+	 
+ * 0x0202 AC-System-Error
+	 * 此TAG显示接入服务器在处理主机请求时遇到错误，如没有足够资源创建一个虚链路，它可以被包含在PADS报文中。 
+	 
+ * 0x0203 Generic-Error
+	 * 当一个不可恢复的错误产生并且没有其他错误适合时，此TAG显示了错误。它能被加到PADO, PADR 或PADS报文中。
+
+
+
+
