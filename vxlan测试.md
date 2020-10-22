@@ -22,7 +22,7 @@ up_tag.stag.vlan_source 值配1 表示point指向 由vlan101指向vlan100
   1. 流规则属性（filter开头参数） 只有匹配了刘规则才会进入该隧道进行vxlan封装
    * ingress &emsp;&emsp;&emsp;&emsp;&emsp; ---入口
    * level   &emsp;&emsp;&emsp;&emsp;&emsp; ---流优先级，当报文同时命中多条pdu流时，取优先级高的
-   * smac_mode &emsp;&emsp;&emsp; ---源mac匹配模式，支持不参与匹配、等于匹配（ignore/equal）
+   * smac_mode &emsp;&emsp;&emsp; ---源mac匹配模式，支持不参与匹配、等于匹配（ignore/equal）配置为equal则走三层vxlan转发
    * smac      &emsp;&emsp;&emsp;&emsp;&emsp;  ---源mac，注意含掩码bit数量[0,15]
    * tag_type_mode  &emsp;&emsp;---tag类型匹配模式，支持不参与匹配，等于匹配
    * tag_type       &emsp;&emsp;&emsp;&emsp;---tag类型 untag/tag
