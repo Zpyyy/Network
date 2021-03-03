@@ -87,4 +87,38 @@ Fork成功，这里选择的是Fork到个人名下。
 第四步：将暂存区的修改文件提交到本地git库中，执行命令：git commit后输入commit message，或者git commit -m "引号内输入commit message"
 
 第五步：将提交的修改推送到远端，执行命令：git push origin master（例子中使用的是默认的远端origin，分支master）
-## 
+
+## 六、向主干库发起MR
+当fork库更改了内容，需要合并到主干库，可以向主干库发起 “合并请求”。
+
+进入项目页面中， 点击左上角的“New Merge Request”,或者进入到“Merge Requests”页面中 ->点击右上角的“New Merge Request”-> 进入到合并请求发起页面 -> 选择合并的项目及分支 -> 填写合并请求说明 -> 提交即可。
+
+## 七、主干库处理MR
+进入到主干库中，在“Merge Requests”中，点击该合并请求的标题，进入合并请求处理页面。
+处理MR时：
+
+1、我们可以看一下该MR的submit中包含了多少commit，modify中包含了哪些差异文件，也可以去看每个commit，确认commit和modify的差异内容一致。
+
+2、可以在MR的modify中做review代码检视。
+
+具体操作，请见代码检视
+
+3、可以配置门禁构建，去触发MR build和对合并提交的代码进行投票。
+
+具体操作，请见门禁构建和投票
+
+4、可以设置MR模板、评论模板、构建失败MR自动关闭、min vote、draft模式MR。
+
+具体操作，请见Merge Request Settings
+
+5、最后一步就是 Merge，如果这个MR不符合要求，我们可以close。
+
+如果此合并请求可以被自动合并
+
+作为项目的owner、pmc、committer，可以
+
+自动合并此请求：提交上来的代码自动合并进入指定分支
+关闭此合并请求：不理会此合并请求，关闭未合并的请求仍能重新打开
+查看此次合并请求所有提交记录，及提交内容与当前内容的差异
+删除此合并请求下的所有评论
+如果此合并请求有冲突，请点击这里进行解决
