@@ -1,0 +1,77 @@
+1、SPI NAND FLASH（17L/V/P、82H/S/T等）
+1)启动流程参数说明
+//选择片选1，将从起始地址0x100000开始长度为0x200000（2M）的flash空间内容写入起始地址为0x81000000的ddr空间，然后从0x81000000启动，此处加载的是内核（uimage）文件
+setenv bootcmd 'sf probe 1;sf read 0x81000000 0x100000 0x200000;bootm 0x81000000'
+//内核启动后，会从后面的flash空间（即起始地址0x300000）获取rootfs应用文件
+
+2)版本文件烧写流程
+//通过tftp下载版本文件到起始地址为0x81000000的ddr空间
+tftp 0x81000000 rootfs.squashfs
+//初始化spi nand flash片选1
+sf probe 1
+//擦除从起始地址0x400000开始长度为0x1600000（22M）的flash空间
+sf erase 0x400000 0x1600000
+//将起始地址为0x81000000开始长度为0x1600000的ddr空间内容写入起始地址为0x400000的flash空间
+sf write 0x85000000 0x400000 0x1600000
+
+
+2、NAND FLASH（18V1/18V2/16T/17M等）
+1)启动流程参数说明
+//从起始地址0x100000开始长度为0x200000（2M）的flash空间内容写入起始地址为0x80800000的ddr空间，然后从0x80800000启动，此处加载的是内核（uimage）文件
+setenv bootcmd 'nand read 0x80800000 0x100000 0x200000;bootm 0x80800000'
+//内核启动后，会从后面的flash空间（即起始地址0x300000）获取rootfs应用文件
+
+2)版本文件烧写流程
+//通过tftp下载版本文件到起始地址为0x81000000的ddr空间
+tftp 0x81000000 rootfs.squashfs
+//擦除从起始地址0x400000开始长度为0x1600000（22M）的flash空间
+nand erase 0x400000 0x1600000
+//将起始地址为0x81000000开始长度为0x1600000的ddr空间内容写入起始地址为0x400000的flash空间
+nand write 0x85000000 0x400000 0x1600000
+
+# server：放你的版本，代表是从哪里传到板子上的，就是服务器端
+# ipaddr单板ip：想版本加到单板上  准确的说是串口服务器上  然后单板的ip设为6.3.159.100，最后面那个100随便设  只要ping不通就说明没人用这个单板ip
+
+
+#设置单板ip：
+set ipaddr 192.168.1.133
+#本地：
+set ipaddr  6.3.159.100
+
+
+#设置主机ip：（如果是本地传则设为本机ip地址）
+set serverip 192.168.1.20
+#本地：
+set serverip 6.15.91.202
+
+#本地
+setenv netmask 255.0.0.0
+
+#设置网关ip：
+##setenv gatewayip 70.31.32.1
+
+#保存: 
+saveenv
+
+#rootfs.squashfs是文件名， uImage-32M也是文件名
+load_sf_rootfs rootfs.squashfs
+load_nf_kernel uImage-32M
+
+# 版本不上 tftp能连接得上但反复刷新# 修正相位
+mw 0x14001074 0x32
+
+##老版本uboot加载前配置
+mw 0x14940034 0x1a5
+mw 0x14940038 0x1a5
+mw 0x1494003C 0xBa4
+mw 0x14940040 0x124
+mw 0x14940044 0x124
+mw 0x14940070 0x124
+
+#没时钟源配置
+md 0x14900158 
+mw 0x14900158 0x40000000 
+
+# 环境参数配置不生效 执行以下
+#可能是超过参数长度了所以没有配进去
+setenv bootargs 'mem=96M console=ttyAMA1,115200 root=/dev/mtdblock2 efb_depth=12288 rootfstype=squashfs mtdparts=hinand:1M(boot),2M(kernel),26M(rootfs),2M(jffs2),-(conf) rootflags=image_off=0x0 flash_io_mode=read:x1,write:x1 flash_control=fmc printk.time=n maxcpus=2'
