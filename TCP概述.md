@@ -6,7 +6,7 @@
 
 ## TCP报文格式
 
-![（图1）](https://img-blog.csdnimg.cn/20181113003420540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTMyNTY4MTY=,size_16,color_FFFFFF,t_70) 
+![img](https://img-blog.csdn.net/20140609125220296?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTE5ODgxMDI5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center) 
 
 - 滑动窗口大小（Window）
 
@@ -89,7 +89,7 @@
 
   SACK 的工作原理如下图所示， 接收方收到 500-699 的数据包，但没有收到 300-499 的数据包就会回 SACK(500-700) 给发送端，表示收到 500-699 的数据。
 
-  ![https://p1-tt.byteimg.com/large/pgc-image/352de140635649e08a5c4cc019c9db53](http://image.huawei.com/tiny-lts/v1/images/a54cf26ddb9dfbe75f56_640x360.jpg@900-0-90-f.jpg)
+  ![img](https://img-blog.csdn.net/20180408162857844) 
 
 8. Window Scale (WSCALE or WSopt) Option 
 
